@@ -3,7 +3,7 @@
 #include "freertos/task.h"
 #include "driver/gpio.h"
 #define LED_GPIO 2
-bool Input;
+int Input;
 void app_main()
 {
     gpio_reset_pin(LED_GPIO);
