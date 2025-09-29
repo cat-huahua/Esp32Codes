@@ -1,13 +1,16 @@
 #include <stdio.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
-#define Wait 3000 // Wait time in milliseconds
-bool Status, Input;
+#include "driver/gpio.h"
+#define LED_Pin 2
+bool Input;
 void app_main()
 {
     while (1)
     {
-        
+        scanf("%d", &Input);
+
+
     }
     
 }
