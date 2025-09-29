@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
-#define Wait 3000
+#define Wait 3000 // Wait time in milliseconds
 void app_main(){
     while (1)
     {
         // Infinite loop to keep the application running
         printf("Hello, ESP32!\n");
-        vTaskDelay(Wait / portTICK_PERIOD_MS); // Delay for 3 seconds
+        vTaskDelay(Wait); // Delay for 3 seconds
     }
 }
