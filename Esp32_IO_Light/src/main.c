@@ -7,6 +7,6 @@ void app_main(){
     {
         // Infinite loop to keep the application running
         printf("Hello, ESP32!\n");
-        vTaskDelay(Wait); // Delay for 3 seconds
+        vTaskDelay(Wait / portTICK_PERIOD_MS); // Delay for 3 seconds
     }
 }
