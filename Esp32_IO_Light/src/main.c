@@ -7,5 +7,4 @@ void app_main(){
         printf("Hello, ESP32!\n");
         vTaskDelay(Wait); // Delay for 3 seconds
     }
-    return 0;
 }
