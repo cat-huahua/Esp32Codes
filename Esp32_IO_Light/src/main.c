@@ -11,8 +11,14 @@ void app_main()
     while (1)
     {
         scanf("%d", &Input);
-
-
+        if (Input)
+        {
+            gpio_set_level(LED_GPIO, 1);
+        }
+        else
+        {
+            gpio_set_level(LED_GPIO, 0);
+        }
+        
     }
-    
 }
