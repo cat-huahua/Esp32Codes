@@ -1,7 +1,8 @@
 #include <Arduino.h>
-#define redPin 13
-#define greenPin 12
-#define bluePin 11
+#define redPin 36
+#define greenPin 39
+#define bluePin 34
+#define DelayTime 5
 // put function declarations here:
 int blinkLED(int pin, int delayTime);
 
@@ -16,9 +17,9 @@ void setup()
 void loop()
 {
   // put your main code here, to run repeatedly:
-  blinkLED(redPin, 5);
-  blinkLED(greenPin, 5);
-  blinkLED(bluePin, 5);
+  blinkLED(redPin, DelayTime);
+  blinkLED(greenPin, DelayTime);
+  blinkLED(bluePin, DelayTime);
 }
 
 // put function definitions here:
