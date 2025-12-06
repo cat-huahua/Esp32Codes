@@ -8,7 +8,7 @@
 
 #include <TinyGPS++.h>
 
-#define GPS_BAUDRATE 9600  // The default baudrate of NEO-6M is 9600
+#define GPS_BAUDRATE 4800  // The default baudrate of NEO-6M is 9600
 
 TinyGPSPlus gps;  // the TinyGPS++ object
 
