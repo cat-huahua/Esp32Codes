@@ -8,12 +8,12 @@
 
 #include <TinyGPS++.h>
 
-#define GPS_BAUDRATE 4800  // The default baudrate of NEO-6M is 9600
+#define GPS_BAUDRATE 115200  // The default baudrate of NEO-6M is 9600
 
 TinyGPSPlus gps;  // the TinyGPS++ object
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
   Serial2.begin(GPS_BAUDRATE, SERIAL_8N1, 16, 17);
 
   Serial.println(F("ESP32 - GPS module"));
