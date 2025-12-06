@@ -1,34 +1,72 @@
-// Requires TinyGPSPlus library (TinyGPSPlus by Mikal Hart)
-// In Arduino IDE: Sketch -> Include Library -> Manage Libraries -> search "TinyGPSPlus"
+/*
+ * This ESP32 code is created by esp32io.com
+ *
+ * This ESP32 code is released in the public domain
+ *
+ * For more detail (instruction and wiring diagram), visit https://esp32io.com/tutorials/esp32-gps
+ */
 
 #include <TinyGPS++.h>
-#include <HardwareSerial.h>
 
-TinyGPSPlus gps;
-HardwareSerial SerialGPS(2); // Use UART2
+#define GPS_BAUDRATE 9600  // The default baudrate of NEO-6M is 9600
 
-const int RXPin = 16; // ESP32 RX2 (connect to GPS TX)
-const int TXPin = 17; // ESP32 TX2 (connect to GPS RX)
-const uint32_t GPSBaud = 9600;
+TinyGPSPlus gps;  // the TinyGPS++ object
 
 void setup() {
   Serial.begin(9600);
-  delay(100);
-  Serial.println("NEO-6M + ESP32 example");
-  SerialGPS.begin(GPSBaud, SERIAL_8N1, RXPin, TXPin);
+  Serial2.begin(GPS_BAUDRATE, SERIAL_8N1, 16, 17);
+
+  Serial.println(F("ESP32 - GPS module"));
 }
 
 void loop() {
-  while (SerialGPS.available() > 0) {
-    char c = SerialGPS.read();
-    gps.encode(c);
-  
+  if (Serial2.available() > 0) {
+    if (gps.encode(Serial2.read())) {
+      if (gps.location.isValid()) {
+        Serial.print(F("- latitude: "));
+        Serial.println(gps.location.lat());
 
-  if (gps.location.isUpdated()) {
-    Serial.print("Latitude: ");
-    Serial.print(gps.location.lat(), 6);
-    Serial.print(" Longitude: ");
-    Serial.println(gps.location.lng(), 6);
+        Serial.print(F("- longitude: "));
+        Serial.println(gps.location.lng());
+
+        Serial.print(F("- altitude: "));
+        if (gps.altitude.isValid())
+          Serial.println(gps.altitude.meters());
+        else
+          Serial.println(F("INVALID"));
+      } else {
+        Serial.println(F("- location: INVALID"));
+      }
+
+      Serial.print(F("- speed: "));
+      if (gps.speed.isValid()) {
+        Serial.print(gps.speed.kmph());
+        Serial.println(F(" km/h"));
+      } else {
+        Serial.println(F("INVALID"));
+      }
+
+      Serial.print(F("- GPS date&time: "));
+      if (gps.date.isValid() && gps.time.isValid()) {
+        Serial.print(gps.date.year());
+        Serial.print(F("-"));
+        Serial.print(gps.date.month());
+        Serial.print(F("-"));
+        Serial.print(gps.date.day());
+        Serial.print(F(" "));
+        Serial.print(gps.time.hour());
+        Serial.print(F(":"));
+        Serial.print(gps.time.minute());
+        Serial.print(F(":"));
+        Serial.println(gps.time.second());
+      } else {
+        Serial.println(F("INVALID"));
+      }
+
+      Serial.println();
     }
   }
+
+  if (millis() > 5000 && gps.charsProcessed() < 10)
+    Serial.println(F("No GPS data received: check wiring"));
 }
