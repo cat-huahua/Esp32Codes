@@ -12,7 +12,7 @@ const int TXPin = 17; // ESP32 TX2 (connect to GPS RX)
 const uint32_t GPSBaud = 9600;
 
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(9600);
   delay(100);
   Serial.println("NEO-6M + ESP32 example");
   SerialGPS.begin(GPSBaud, SERIAL_8N1, RXPin, TXPin);
