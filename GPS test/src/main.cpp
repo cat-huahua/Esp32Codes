@@ -19,29 +19,16 @@ void setup() {
 }
 
 void loop() {
-  // Feed GPS characters into TinyGPS++ parser
   while (SerialGPS.available() > 0) {
     char c = SerialGPS.read();
     gps.encode(c);
-  }
+  
 
-  // When a new location is available, print some useful info
   if (gps.location.isUpdated()) {
-    Serial.print("Lat: "); Serial.println(gps.location.lat(), 6);
-    Serial.print("Lng: "); Serial.println(gps.location.lng(), 6);
-    if (gps.altitude.isValid()) {
-      Serial.print("Alt: "); Serial.print(gps.altitude.meters()); Serial.println(" m");
+    Serial.print("Latitude: ");
+    Serial.print(gps.location.lat(), 6);
+    Serial.print(" Longitude: ");
+    Serial.println(gps.location.lng(), 6);
     }
-    Serial.print("Sats: "); Serial.println(gps.satellites.value());
-    if (gps.time.isValid()) {
-      Serial.print("Time (UTC): ");
-      if (gps.time.hour() < 10) Serial.print('0');
-      Serial.print(gps.time.hour()); Serial.print(':');
-      if (gps.time.minute() < 10) Serial.print('0');
-      Serial.print(gps.time.minute()); Serial.print(':');
-      if (gps.time.second() < 10) Serial.print('0');
-      Serial.println(gps.time.second());
-    }
-    Serial.println();
   }
 }
