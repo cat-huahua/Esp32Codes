@@ -7,7 +7,8 @@
 #define SCREEN_HEIGHT 64
 #define OLED_RESET    -1
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
-
+//functions declaration
+void drawDisplay();
 // Pins
 const int sensorPin = 34; // ADC pin from HW-502
 
@@ -56,6 +57,44 @@ void setup() {
   smooth = analogRead(sensorPin);
   prevRaw = smooth;
   Serial.println("Ready. Place finger on sensor.");
+}
+
+void drawDisplay() {
+ display.clearDisplay();
+
+  // BPM text
+  display.setTextSize(2);
+  display.setCursor(0, 0);
+  if (bpm > 0) {
+    display.print(bpm);
+    display.print(" ");
+    display.setTextSize(1);
+    display.print("BPM");
+  } else {
+    display.print("--");
+    display.setTextSize(1);
+    display.print(" BPM");
+  }
+
+  // Draw waveform (bottom area)
+  int baseY = 20;
+  for (int i=0; i<127; i++) {
+    int idxA = (wfIndex + i) % 128;
+    int idxB = (wfIndex + i + 1) % 128;
+    int xA = i;
+    int xB = i+1;
+    int yA = waveform[idxA];
+    int yB = waveform[idxB];
+    // shift waveform down a bit so it doesn't overlap text
+    display.drawLine(xA, baseY + yA/2, xB, baseY + yB/2, SSD1306_WHITE);
+  }
+
+  // small helper text
+  display.setTextSize(1);
+  display.setCursor(0, 54);
+  display.print("Place finger. Tweak threshold if needed.");
+
+  display.display();
 }
 
 void loop() {
@@ -121,42 +160,4 @@ void loop() {
       drawDisplay();
     }
   }
-}
-
-void drawDisplay() {
-  display.clearDisplay();
-
-  // BPM text
-  display.setTextSize(2);
-  display.setCursor(0, 0);
-  if (bpm > 0) {
-    display.print(bpm);
-    display.print(" ");
-    display.setTextSize(1);
-    display.print("BPM");
-  } else {
-    display.print("--");
-    display.setTextSize(1);
-    display.print(" BPM");
-  }
-
-  // Draw waveform (bottom area)
-  int baseY = 20;
-  for (int i=0; i<127; i++) {
-    int idxA = (wfIndex + i) % 128;
-    int idxB = (wfIndex + i + 1) % 128;
-    int xA = i;
-    int xB = i+1;
-    int yA = waveform[idxA];
-    int yB = waveform[idxB];
-    // shift waveform down a bit so it doesn't overlap text
-    display.drawLine(xA, baseY + yA/2, xB, baseY + yB/2, SSD1306_WHITE);
-  }
-
-  // small helper text
-  display.setTextSize(1);
-  display.setCursor(0, 54);
-  display.print("Place finger. Tweak threshold if needed.");
-
-  display.display();
 }
