@@ -7,11 +7,47 @@
 #define SCREEN_HEIGHT 64
 #define OLED_RESET    -1
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
-//functions declaration
-void drawDisplay();
+
 // Pins
 const int sensorPin = 34; // ADC pin from HW-502
+//Display function
+void drawDisplay() {
+  display.clearDisplay();
 
+  // BPM text
+  display.setTextSize(2);
+  display.setCursor(0, 0);
+  if (bpm > 0) {
+    display.print(bpm);
+    display.print(" ");
+    display.setTextSize(1);
+    display.print("BPM");
+  } else {
+    display.print("--");
+    display.setTextSize(1);
+    display.print(" BPM");
+  }
+
+  // Draw waveform (bottom area)
+  int baseY = 20;
+  for (int i=0; i<127; i++) {
+    int idxA = (wfIndex + i) % 128;
+    int idxB = (wfIndex + i + 1) % 128;
+    int xA = i;
+    int xB = i+1;
+    int yA = waveform[idxA];
+    int yB = waveform[idxB];
+    // shift waveform down a bit so it doesn't overlap text
+    display.drawLine(xA, baseY + yA/2, xB, baseY + yB/2, SSD1306_WHITE);
+  }
+
+  // small helper text
+  display.setTextSize(1);
+  display.setCursor(0, 54);
+  display.print("Place finger. Tweak threshold if needed.");
+
+  display.display();
+}
 // Sampling
 const unsigned long sampleIntervalMicros = 5000; // 5 ms -> 200 Hz
 unsigned long lastSampleMicros = 0;
@@ -21,7 +57,7 @@ int raw = 0;
 float smooth = 0;
 int prevRaw = 0;
 const float alpha = 0.08; // smoothing factor for low-pass
-int threshold = 35;       // detection threshold (will be adjusted)
+int threshold = 30;       // detection threshold (will be adjusted)
 int minBeatInterval = 250; // ms (max 240 BPM limit)
 unsigned long lastBeatTime = 0;
 
@@ -57,44 +93,6 @@ void setup() {
   smooth = analogRead(sensorPin);
   prevRaw = smooth;
   Serial.println("Ready. Place finger on sensor.");
-}
-
-void drawDisplay() {
- display.clearDisplay();
-
-  // BPM text
-  display.setTextSize(2);
-  display.setCursor(0, 0);
-  if (bpm > 0) {
-    display.print(bpm);
-    display.print(" ");
-    display.setTextSize(1);
-    display.print("BPM");
-  } else {
-    display.print("--");
-    display.setTextSize(1);
-    display.print(" BPM");
-  }
-
-  // Draw waveform (bottom area)
-  int baseY = 20;
-  for (int i=0; i<127; i++) {
-    int idxA = (wfIndex + i) % 128;
-    int idxB = (wfIndex + i + 1) % 128;
-    int xA = i;
-    int xB = i+1;
-    int yA = waveform[idxA];
-    int yB = waveform[idxB];
-    // shift waveform down a bit so it doesn't overlap text
-    display.drawLine(xA, baseY + yA/2, xB, baseY + yB/2, SSD1306_WHITE);
-  }
-
-  // small helper text
-  display.setTextSize(1);
-  display.setCursor(0, 54);
-  display.print("Place finger. Tweak threshold if needed.");
-
-  display.display();
 }
 
 void loop() {
