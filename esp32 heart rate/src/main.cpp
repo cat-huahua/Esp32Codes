@@ -10,7 +10,7 @@
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 // Pins
-const int sensorPin = 34; // ADC pin from HW-502
+const int sensorPin = 30; // ADC pin from HW-502
 
 // Sampling
 const unsigned long sampleIntervalMicros = 5000; // 5 ms -> 200 Hz
