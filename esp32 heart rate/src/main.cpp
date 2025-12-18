@@ -10,7 +10,7 @@
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 // Pins
-const int sensorPin = 30; // ADC pin from HW-502
+const int sensorPin = 34; // ADC pin from HW-502
 
 // Sampling
 const unsigned long sampleIntervalMicros = 5000; // 5 ms -> 200 Hz
@@ -21,7 +21,7 @@ int raw = 0;
 float smooth = 0;
 int prevRaw = 0;
 const float alpha = 0.08; // smoothing factor for low-pass
-int threshold = 35;       // detection threshold (will be adjusted)
+int threshold = 30;       // detection threshold (will be adjusted)
 int minBeatInterval = 250; // ms (max 240 BPM limit)
 unsigned long lastBeatTime = 0;
 
