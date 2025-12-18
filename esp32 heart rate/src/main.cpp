@@ -21,7 +21,7 @@ int raw = 0;
 float smooth = 0;
 int prevRaw = 0;
 const float alpha = 0.08; // smoothing factor for low-pass
-int threshold = 30;       // detection threshold (will be adjusted)
+int threshold = 35;       // detection threshold (will be adjusted)
 int minBeatInterval = 250; // ms (max 240 BPM limit)
 unsigned long lastBeatTime = 0;
 
